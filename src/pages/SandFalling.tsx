@@ -4,29 +4,28 @@ import { initializeGrid } from "./utils";
 
 const black = 50;
 const white = 255;
-const lightGray = 80;
-const w = 20;
+const w = 10;
 
 const SandFalling = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<number[][]>([]);
+  let grid: number[][] = [];
 
   useEffect(() => {
     const sketch = (p: p5) => {
       p.setup = () => {
-        p.createCanvas(600, 600);
+        p.createCanvas(680, 680);
+        p.frameRate(80);
         const cols = Math.floor(p.width / w);
         const rows = Math.floor(p.height / w);
-        gridRef.current = initializeGrid(cols, rows, black);
+        grid = initializeGrid(cols, rows, black);
       };
 
       p.draw = () => {
         p.background(black);
-        let grid = gridRef.current;
 
         grid.forEach((row, rowIndex) => {
           row.forEach((cell, colIndex) => {
-            p.stroke(lightGray);
+            p.stroke(black);
             p.fill(cell);
             p.square(colIndex * w, rowIndex * w, w);
           });
@@ -59,7 +58,7 @@ const SandFalling = () => {
             }
           }
         }
-        gridRef.current = updatedGrid;
+        grid = updatedGrid;
       };
 
       // Function to turn squares white where the mouse is
@@ -72,8 +71,16 @@ const SandFalling = () => {
         ) {
           const col = Math.floor(p.mouseX / w);
           const row = Math.floor(p.mouseY / w);
-          if (gridRef.current[row] && gridRef.current[row][col] !== undefined) {
-            gridRef.current[row][col] = white;
+          const area = 4;
+          const limit = Math.floor(area / 2);
+          if (grid[row] && grid[row][col] !== undefined) {
+            for (let i = -limit; i < limit; i++) {
+              for (let j = -limit; j < limit; j++) {
+                if (grid[row + i] && grid[row + i][col + j] !== undefined) {
+                  if (p.random(1) < 0.5) grid[row + i][col + j] = white;
+                }
+              }
+            }
           }
         }
       };
