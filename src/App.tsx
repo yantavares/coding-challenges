@@ -4,6 +4,7 @@ import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import SandFalling from "./pages/SandFalling";
 import Home from "./pages/home";
+import GameOfLife from "./pages/GameOfLife";
 
 function App() {
   return (
@@ -11,12 +12,8 @@ function App() {
       <Suspense fallback={<CircularProgress />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/coding-challenges" element={<Home />} />
           <Route path="/sand-falling" element={<SandFalling />} />
-          <Route
-            path="/coding-challenges/sand-falling"
-            element={<SandFalling />}
-          />
+          <Route path="/game-of-life" element={<GameOfLife />} />
         </Routes>
       </Suspense>
     </HashRouter>
