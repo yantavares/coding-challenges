@@ -64,7 +64,7 @@ Before running the project, make sure you have the following installed:
 
 ## Deployment
 
-This project will soon be deployed for public access. Deployment details and the link to the live website will be provided here once available.
+The project has now been deployed and is available for public access. You can visit the live website at [https://yantavares.github.io/coding-challenges/](https://yantavares.github.io/coding-challenges/).
 
 ## Contributing
 
