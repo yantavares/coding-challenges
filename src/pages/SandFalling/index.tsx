@@ -32,7 +32,7 @@ const SandFalling = () => {
         p.colorMode(p.HSB, 360, 255, 255);
         const cols = Math.floor(p.width / w);
         const rows = Math.floor(p.height / w);
-        grid = initializeGrid(cols, rows);
+        grid = initializeGrid(rows, cols);
       };
 
       p.draw = () => {

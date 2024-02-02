@@ -19,3 +19,15 @@ export const initializeGrid = (rows: number, cols: number, symbol = 0) => {
   }
   return grid;
 };
+
+export const initializeRandomGrid = (rows: number, cols: number) => {
+  rows = Math.floor(rows);
+  cols = Math.floor(cols);
+  let grid = makeGrid(rows, cols);
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      grid[i][j] = Math.random() > 0.5 ? 1 : 0;
+    }
+  }
+  return grid;
+};
