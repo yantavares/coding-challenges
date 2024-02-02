@@ -38,22 +38,21 @@ const GameOfLife = () => {
       };
 
       p.draw = () => {
-        if (!isPausedRef.current) {
-          p.background(black);
-          for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < cols; j++) {
-              const cell = grid[i][j];
-              p.fill(cell === 1 ? gray : black);
-              p.square(j * cellSize, i * cellSize, cellSize);
-            }
+        p.background(black);
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            const cell = grid[i][j];
+            p.fill(cell === 1 ? gray : black);
+            p.square(j * cellSize, i * cellSize, cellSize);
           }
-
-          // Compute the next generation
-          grid = computeNextGeneration(grid, rows, cols);
         }
+
+        // Compute the next generation
+        grid = computeNextGeneration(grid, rows, cols);
       };
 
       const computeNextGeneration = (grid, rows, cols) => {
+        if (isPausedRef.current) return grid;
         let newGrid = grid.map((row) => [...row]);
         for (let i = 0; i < rows; i++) {
           for (let j = 0; j < cols; j++) {
