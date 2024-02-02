@@ -1,7 +1,7 @@
 import { isGoal, isHome, updateBoard, updatePath } from ".";
-import AStarSolver from "../../../classes/AStarSolver";
-import BFSSolver from "../../../classes/BFSSolver";
-import DFSSolver from "../../../classes/DFSSolver";
+import AStarSolver from "../../../classes/Maze/AStarSolver";
+import BFSSolver from "../../../classes/Maze/BFSSolver";
+import DFSSolver from "../../../classes/Maze/DFSSolver";
 import { Board, GOAL, Position, VISITED } from "../../../types/mazeTypes";
 
 type SearchType = "DFS" | "BFS" | "A*";

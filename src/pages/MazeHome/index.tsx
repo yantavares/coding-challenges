@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Maze from "../../components/HomeMaze";
 import { StartButton } from "./styles";
 
-const Home = () => {
+const MazeHome = () => {
   const navigate = useNavigate();
   const [board, setBoard] = useState([
     ["h", "", "", "", "", "", ""],
@@ -49,4 +49,4 @@ const Home = () => {
     </div>
   );
 };
-export default Home;
+export default MazeHome;

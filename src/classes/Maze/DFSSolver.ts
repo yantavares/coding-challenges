@@ -1,4 +1,4 @@
-import { Board, HOME, GOAL, Position } from "../types/mazeTypes";
+import { Board, HOME, GOAL, Position } from "../../types/mazeTypes";
 import Solver from "./Solver";
 
 type DFSState = {
