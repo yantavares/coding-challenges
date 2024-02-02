@@ -12,9 +12,10 @@ export const ChallengeContainer = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.18);
   width: 20rem;
   transition: all 100ms ease-in-out;
+  opacity: 0.9;
 
   :hover {
-    opacity: 0.82;
+    opacity: 0.72;
   }
 `;
 
