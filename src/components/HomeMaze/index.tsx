@@ -18,7 +18,7 @@ const BLOCKED = "=";
 const GOAL = "g";
 const HOME = "h";
 
-const Maze = ({ board, setBoard, size = 20, delay = 40 }) => {
+const Maze = ({ board, setBoard, delay = 40 }) => {
   const [lastVisited, setLastVisited] = useState<Position | null>(null);
   const [foundSolution, setFoundSolution] = useState(false);
   const [toggleReload, setToggleReload] = useState(false);

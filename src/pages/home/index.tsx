@@ -22,14 +22,12 @@ const Home = () => {
           url={"/game-of-life"}
         />
         <Challenge
-          name={"Maze Solver"}
+          name={"Maze Solving Playground"}
           info={
             "Showcase of many algorithms designed to solve mazes such as DFS, BFS and A*"
           }
           img={maze}
-          url={
-            "https://yantavares.github.io/maze-visualization-playground/#/maze-visualization-playground/create-maze/"
-          }
+          url={"maze-playground"}
         />
       </div>
     </div>

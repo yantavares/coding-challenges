@@ -24,9 +24,9 @@ const MazeHome = () => {
         gap: "4rem",
       }}
     >
-      <h1 style={{ margin: 0, padding: 0 }}>Maze Visualization Playground</h1>
+      <h1 style={{ margin: 0, padding: 0 }}>Maze Solving Playground</h1>
       <div>
-        <Maze size={6} board={board} setBoard={setBoard} delay={300} />
+        <Maze board={board} setBoard={setBoard} delay={300} />
         <i>Example: solving live using DFS</i>
       </div>
 
@@ -38,11 +38,7 @@ const MazeHome = () => {
           justifyContent: "center",
         }}
       >
-        <StartButton
-          onClick={() =>
-            navigate("/maze-visualization-playground/create-maze/")
-          }
-        >
+        <StartButton onClick={() => navigate("/maze-playground/maze-creator/")}>
           Start
         </StartButton>
       </div>

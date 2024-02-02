@@ -136,7 +136,7 @@ const Maze = ({
 
   const handleGoBack = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    navigate("/maze-visualization-playground/");
+    navigate("/");
   };
 
   return (
