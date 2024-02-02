@@ -19,13 +19,3 @@ export const initializeGrid = (rows: number, cols: number, symbol = 0) => {
   }
   return grid;
 };
-
-export const updateGrid = (
-  position: number[],
-  grid: number[][],
-  symbol: number = 1
-) => {
-  let newGrid = grid.map((row) => row.slice());
-  newGrid[position[0]][position[1]] = symbol;
-  return newGrid;
-};
