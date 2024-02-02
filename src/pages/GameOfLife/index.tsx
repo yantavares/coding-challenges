@@ -1,10 +1,6 @@
 import p5 from "p5";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  initializeRandomGrid,
-  checkNeighbors,
-  checkNeighborsWrapAround,
-} from "../../utils"; // make sure these utils functions exist and are correctly imported
+import { initializeRandomGrid, checkNeighborsWrapAround } from "../../utils"; // make sure these utils functions exist and are correctly imported
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
