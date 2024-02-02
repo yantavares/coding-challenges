@@ -3,7 +3,7 @@ import p5 from "p5";
 import { initializeGrid } from "./utils";
 
 const black = 0;
-const gray = 400;
+const gray = 100;
 const w = 8;
 
 const SandFalling = () => {
@@ -93,7 +93,7 @@ const SandFalling = () => {
             if (selectedMaterial === "sand") {
               for (let i = -limitSand; i < limitSand; i++) {
                 for (let j = -limitSand; j < limitSand; j++) {
-                  if (grid[row + i] && grid[row + i][col + j] !== undefined) {
+                  if (grid[row + i] && grid[row + i][col + j] === black) {
                     if (p.random(1) < 0.5) grid[row + i][col + j] = hueValue;
                   }
                 }
@@ -101,7 +101,7 @@ const SandFalling = () => {
             } else if (selectedMaterial === "concrete") {
               for (let i = -limitConcrete; i < limitConcrete; i++) {
                 for (let j = -limitConcrete; j < limitConcrete; j++) {
-                  if (grid[row + i] && grid[row + i][col + j] !== undefined) {
+                  if (grid[row + i] && grid[row + i][col + j] === black) {
                     grid[row + i][col + j] = gray;
                   }
                 }
