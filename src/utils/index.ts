@@ -31,3 +31,25 @@ export const initializeRandomGrid = (rows: number, cols: number) => {
   }
   return grid;
 };
+
+export const checkNeighbors = (
+  grid: number[][],
+  row: number,
+  col: number,
+  amount = 1
+) => {
+  let neighbors = 0;
+  const rows = grid.length;
+  const cols = grid[0].length;
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      const x = row + i;
+      const y = col + j;
+      if (x > -1 && x < rows && y > -1 && y < cols) {
+        neighbors += grid[x][y];
+      }
+    }
+  }
+  neighbors -= grid[row][col];
+  return neighbors;
+};
