@@ -53,3 +53,27 @@ export const checkNeighbors = (
   neighbors -= grid[row][col];
   return neighbors;
 };
+
+export const checkNeighborsWrapAround = (
+  grid: number[][],
+  row: number,
+  col: number,
+  amount = 1
+) => {
+  let neighbors = 0;
+  const rows = grid.length;
+  const cols = grid[0].length;
+
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      // Wrap around for rows and columns
+      const x = (row + i + rows) % rows;
+      const y = (col + j + cols) % cols;
+
+      neighbors += grid[x][y];
+    }
+  }
+
+  neighbors -= grid[row][col];
+  return neighbors;
+};

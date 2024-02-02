@@ -1,6 +1,10 @@
 import p5 from "p5";
 import React, { useEffect, useRef, useState } from "react";
-import { initializeRandomGrid, checkNeighbors } from "../../utils"; // make sure these utils functions exist and are correctly imported
+import {
+  initializeRandomGrid,
+  checkNeighbors,
+  checkNeighborsWrapAround,
+} from "../../utils"; // make sure these utils functions exist and are correctly imported
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -16,19 +20,19 @@ const GameOfLife = () => {
   const isPausedRef = useRef(false);
   const [isPaused, setIsPaused] = useState(false);
 
-  isPausedRef.current = isPaused; // This line updates the ref whenever isPaused state changes
+  isPausedRef.current = isPaused;
 
   useEffect(() => {
     if (sketchRef.current === null) return;
 
     const sketch = (p: p5) => {
-      let grid;
-      let cols;
-      let rows;
+      let grid: number[][] = [];
+      let cols: number;
+      let rows: number;
 
       p.setup = () => {
         p.createCanvas(1000, 600);
-        p.frameRate(30);
+        p.frameRate(10);
         cols = Math.floor(p.width / cellSize);
         rows = Math.floor(p.height / cellSize);
 
@@ -47,16 +51,19 @@ const GameOfLife = () => {
           }
         }
 
-        // Compute the next generation
         grid = computeNextGeneration(grid, rows, cols);
       };
 
-      const computeNextGeneration = (grid, rows, cols) => {
+      const computeNextGeneration = (
+        grid: number[][],
+        rows: number,
+        cols: number
+      ) => {
         if (isPausedRef.current) return grid;
         let newGrid = grid.map((row) => [...row]);
         for (let i = 0; i < rows; i++) {
           for (let j = 0; j < cols; j++) {
-            let neighbors = checkNeighbors(grid, i, j);
+            let neighbors = checkNeighborsWrapAround(grid, i, j);
             if (grid[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
               newGrid[i][j] = 0;
             } else if (grid[i][j] === 0 && neighbors === 3) {
