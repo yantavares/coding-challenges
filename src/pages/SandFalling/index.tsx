@@ -1,11 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import p5 from "p5";
 import { initializeGrid } from "./utils";
 
 const black = 0;
+const gray = 400;
 const w = 8;
 
 const SandFalling = () => {
+  const selectedButtonRef = useRef("sand");
+  const [selectedButton, setSelectedButton] = useState("sand");
+  const [toggleReload, setToggleReload] = useState(false);
+
   const sketchRef = useRef<HTMLDivElement>(null);
   let grid: number[][] = [];
 
@@ -31,6 +36,7 @@ const SandFalling = () => {
           row.forEach((cell, colIndex) => {
             p.stroke(black);
             if (cell === black) p.fill(black);
+            else if (cell === gray) p.fill(gray);
             else p.fill(cell, 255, 255);
             p.square(colIndex * w, rowIndex * w, w);
           });
@@ -40,7 +46,7 @@ const SandFalling = () => {
         let updatedGrid = grid.map((row) => [...row]);
         for (let i = 0; i < grid.length - 1; i++) {
           for (let j = 0; j < grid[i].length; j++) {
-            if (grid[i][j] !== black) {
+            if (grid[i][j] !== black && grid[i][j] !== gray) {
               if (grid[i + 1][j] === black) {
                 // below is empty
                 updatedGrid[i][j] = black;
@@ -67,7 +73,7 @@ const SandFalling = () => {
       };
 
       // Function to turn squares white where the mouse is
-      const updateGridForMouse = () => {
+      const updateGridForMouse = (selectedMaterial: string) => {
         if (
           p.mouseX >= 0 &&
           p.mouseX < p.width &&
@@ -76,17 +82,28 @@ const SandFalling = () => {
         ) {
           const col = Math.floor(p.mouseX / w);
           const row = Math.floor(p.mouseY / w);
-          const area = 4;
-          const limit = Math.floor(area / 2);
+
+          const limitSand = 2;
+          const limitConcrete = 1;
           if (
             grid[row] &&
             grid[row][col] !== undefined &&
             grid[row][col] === black
           ) {
-            for (let i = -limit; i < limit; i++) {
-              for (let j = -limit; j < limit; j++) {
-                if (grid[row + i] && grid[row + i][col + j] !== undefined) {
-                  if (p.random(1) < 0.5) grid[row + i][col + j] = hueValue;
+            if (selectedMaterial === "sand") {
+              for (let i = -limitSand; i < limitSand; i++) {
+                for (let j = -limitSand; j < limitSand; j++) {
+                  if (grid[row + i] && grid[row + i][col + j] !== undefined) {
+                    if (p.random(1) < 0.5) grid[row + i][col + j] = hueValue;
+                  }
+                }
+              }
+            } else if (selectedMaterial === "concrete") {
+              for (let i = -limitConcrete; i < limitConcrete; i++) {
+                for (let j = -limitConcrete; j < limitConcrete; j++) {
+                  if (grid[row + i] && grid[row + i][col + j] !== undefined) {
+                    grid[row + i][col + j] = gray;
+                  }
                 }
               }
             }
@@ -98,12 +115,12 @@ const SandFalling = () => {
 
       // Mouse pressed event
       p.mousePressed = () => {
-        updateGridForMouse();
+        updateGridForMouse(selectedButtonRef.current);
       };
 
       // Mouse dragged event
       p.mouseDragged = () => {
-        updateGridForMouse();
+        updateGridForMouse(selectedButtonRef.current);
       };
     };
 
@@ -114,9 +131,42 @@ const SandFalling = () => {
     return () => {
       myp5.remove();
     };
-  }, []);
+  }, [toggleReload]);
 
-  return <div ref={sketchRef}></div>;
+  const handleMaterialChange = (material) => {
+    selectedButtonRef.current = material;
+    setSelectedButton(material);
+  };
+
+  return (
+    <div style={{ display: "flex", gap: "1rem" }}>
+      <div ref={sketchRef} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "0.5rem",
+        }}
+      >
+        <button
+          style={selectedButton === "sand" ? { border: "1px solid cyan" } : {}}
+          onClick={() => handleMaterialChange("sand")}
+        >
+          Sand
+        </button>
+        <button
+          style={
+            selectedButton === "concrete" ? { border: "1px solid cyan" } : {}
+          }
+          onClick={() => handleMaterialChange("concrete")}
+        >
+          Concrete
+        </button>
+        <button onClick={() => setToggleReload(!toggleReload)}>Clear</button>
+      </div>
+    </div>
+  );
 };
 
 export default SandFalling;
