@@ -1,8 +1,7 @@
 import p5 from "p5";
 import React, { useEffect, useRef } from "react";
 
-const GameOfLife = () => {
-  // Conways Game of Life celluar automata simulation
+const Template = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const sketch = (p: p5) => {
@@ -28,4 +27,4 @@ const GameOfLife = () => {
   return <div ref={sketchRef} />;
 };
 
-export default GameOfLife;
+export default Template;
