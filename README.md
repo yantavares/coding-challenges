@@ -1,4 +1,4 @@
-# React Coding Challenges with p5.js
+# React Coding Challenges with TS and p5.js
 
 ## Introduction
 
