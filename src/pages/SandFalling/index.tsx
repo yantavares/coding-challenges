@@ -27,7 +27,7 @@ const SandFalling = () => {
   useEffect(() => {
     const sketch = (p: p5) => {
       p.setup = () => {
-        p.createCanvas(640, 640);
+        p.createCanvas(560, 560);
         p.frameRate(30);
         p.colorMode(p.HSB, 360, 255, 255);
         const cols = Math.floor(p.width / w);
