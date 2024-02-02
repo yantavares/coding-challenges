@@ -2,11 +2,12 @@ import React from "react";
 import Challenge from "../../components/Challenge";
 import sand from "../../assets/sand.png";
 import gof from "../../assets/gof.png";
+import maze from "../../assets/maze.png";
 
 const Home = () => {
   return (
     <div>
-      <h1>Coding Challenges with P5.js</h1>
+      <h1>Coding Challenges with TS</h1>
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <Challenge
           name={"Sand Falling Game"}
@@ -19,6 +20,14 @@ const Home = () => {
           info={"Cellular Automata designed by mathmatician John Horton Conway"}
           img={gof}
           url={"/game-of-life"}
+        />
+        <Challenge
+          name={"Maze Solving Playground"}
+          info={
+            "Showcase of many algorithms designed to solve mazes such as DFS, BFS and A*"
+          }
+          img={maze}
+          url={"maze-playground"}
         />
       </div>
     </div>
