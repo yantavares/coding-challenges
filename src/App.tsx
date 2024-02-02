@@ -1,18 +1,20 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { Suspense } from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import SandFalling from "./pages/SandFalling";
+import Home from "./pages/home";
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Suspense fallback={<CircularProgress />}>
         <Routes>
-          <Route path="/" element={<SandFalling />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/sand-falling" element={<SandFalling />} />
         </Routes>
       </Suspense>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

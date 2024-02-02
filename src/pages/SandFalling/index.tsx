@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import p5 from "p5";
 import { initializeGrid } from "./utils";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 
 const black = 0;
 const gray = 100;
@@ -10,6 +13,8 @@ const SandFalling = () => {
   const selectedButtonRef = useRef("sand");
   const [selectedButton, setSelectedButton] = useState("sand");
   const [toggleReload, setToggleReload] = useState(false);
+
+  const navigate = useNavigate();
 
   const sketchRef = useRef<HTMLDivElement>(null);
   let grid: number[][] = [];
@@ -140,6 +145,18 @@ const SandFalling = () => {
 
   return (
     <div style={{ display: "flex", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "0.5rem",
+        }}
+      >
+        <button onClick={() => navigate("/")}>
+          <FontAwesomeIcon icon={faLeftLong} />
+        </button>
+      </div>
       <div ref={sketchRef} />
       <div
         style={{
