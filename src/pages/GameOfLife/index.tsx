@@ -1,6 +1,6 @@
 import p5 from "p5";
 import React, { useEffect, useRef, useState } from "react";
-import { initializeRandomGrid, checkNeighborsWrapAround } from "../../utils"; // make sure these utils functions exist and are correctly imported
+import { initializeRandomGrid, checkNeighborsWrapAround } from "../../utils"; // Ensure these utility functions are correctly implemented
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -13,10 +13,14 @@ const GameOfLife = () => {
   const navigate = useNavigate();
   const [cellSize, setCellSize] = useState(10);
   const [toggleReload, setToggleReload] = useState(false);
-  const isPausedRef = useRef(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [frameCount, setFrameCount] = useState(0);
+  const [population, setPopulation] = useState(0);
+  const isPausedRef = useRef(isPaused);
 
-  isPausedRef.current = isPaused;
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   useEffect(() => {
     if (sketchRef.current === null) return;
@@ -32,12 +36,17 @@ const GameOfLife = () => {
         cols = Math.floor(p.width / cellSize);
         rows = Math.floor(p.height / cellSize);
 
-        console.log(cols, rows);
-
         grid = initializeRandomGrid(rows, cols);
+        countPopulation(grid);
+      };
+
+      const countPopulation = (grid: number[][]) => {
+        let alive = grid.flat().reduce((acc, cell) => acc + cell, 0);
+        setPopulation(alive);
       };
 
       p.draw = () => {
+        if (!isPausedRef.current) setFrameCount((prev) => prev + 1);
         p.background(black);
         for (let i = 0; i < rows; i++) {
           for (let j = 0; j < cols; j++) {
@@ -48,6 +57,7 @@ const GameOfLife = () => {
         }
 
         grid = computeNextGeneration(grid, rows, cols);
+        countPopulation(grid);
       };
 
       const computeNextGeneration = (
@@ -81,6 +91,13 @@ const GameOfLife = () => {
   const handleCellSizeChange = (newSize: number) => {
     setCellSize(newSize);
     setToggleReload(!toggleReload);
+    setFrameCount(0);
+    setPopulation(0);
+  };
+
+  const handleClear = () => {
+    setToggleReload(!toggleReload);
+    setFrameCount(0);
   };
 
   return (
@@ -96,7 +113,7 @@ const GameOfLife = () => {
         <button onClick={() => navigate("/")}>
           <FontAwesomeIcon icon={faLeftLong} />
         </button>
-        <button onClick={() => setToggleReload(!toggleReload)}>Clear</button>
+        <button onClick={handleClear}>Clear</button>
         <button onClick={() => setIsPaused(!isPaused)}>
           {isPaused ? "Play" : "Pause"}
         </button>
@@ -109,6 +126,7 @@ const GameOfLife = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginRight: "5rem",
           }}
         >
           {[5, 10, 15, 20, 25].map((size) => (
@@ -117,7 +135,25 @@ const GameOfLife = () => {
             </option>
           ))}
         </select>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            position: "absolute",
+            right: "19rem",
+            justifySelf: "flex-end",
+            alignSelf: "flex-end",
+          }}
+        >
+          <p style={{ width: "6.7rem" }}>
+            Time passed: <a>{frameCount}</a>
+          </p>
+          <p style={{ width: "8rem" }}>
+            Population count: <a>{population}</a>
+          </p>
+        </div>
       </div>
+
       <div ref={sketchRef} />
     </div>
   );
