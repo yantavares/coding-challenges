@@ -27,7 +27,7 @@ const GameOfLife = () => {
       let rows: number;
 
       p.setup = () => {
-        p.createCanvas(1000, 600);
+        p.createCanvas(1000, 560);
         p.frameRate(10);
         cols = Math.floor(p.width / cellSize);
         rows = Math.floor(p.height / cellSize);
@@ -78,13 +78,13 @@ const GameOfLife = () => {
     };
   }, [toggleReload, cellSize]);
 
-  const handleCellSizeChange = (newSize) => {
+  const handleCellSizeChange = (newSize: number) => {
     setCellSize(newSize);
     setToggleReload(!toggleReload);
   };
 
   return (
-    <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+    <div style={{ display: "flex", gap: "0.5rem", flexDirection: "column" }}>
       <div
         style={{
           display: "flex",
