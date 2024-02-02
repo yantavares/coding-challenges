@@ -11,7 +11,12 @@ function App() {
       <Suspense fallback={<CircularProgress />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/coding-challenges" element={<Home />} />
           <Route path="/sand-falling" element={<SandFalling />} />
+          <Route
+            path="/coding-challenges/sand-falling"
+            element={<SandFalling />}
+          />
         </Routes>
       </Suspense>
     </BrowserRouter>
