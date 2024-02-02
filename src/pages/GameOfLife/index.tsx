@@ -24,7 +24,7 @@ const GameOfLife = () => {
         p.draw = () => {
           p.background(black);
           grid.forEach((row, rowIndex) => {
-            row.forEach((cell, colIndex) => {
+            row.forEach((cell: number, colIndex: number) => {
               p.stroke(black);
               if (cell === black) p.fill(black);
               else if (cell === gray) p.fill(gray);
