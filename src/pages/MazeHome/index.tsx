@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Maze from "../../components/HomeMaze";
-import { StartButton } from "./styles";
+import { CancelButton, StartButton } from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";
 
 const MazeHome = () => {
   const navigate = useNavigate();
@@ -33,11 +35,14 @@ const MazeHome = () => {
       <div
         style={{
           display: "flex",
-          gap: "2rem",
+          gap: "1rem",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
+        <CancelButton onClick={() => navigate("/")}>
+          <FontAwesomeIcon icon={faLongArrowAltLeft} />
+        </CancelButton>
         <StartButton onClick={() => navigate("/maze-playground/maze-creator/")}>
           Start
         </StartButton>
