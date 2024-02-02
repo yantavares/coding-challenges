@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from "react";
 const Template = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    if (sketchRef.current === null) return;
+
     const sketch = (p: p5) => {
       p.setup = () => {
         p.createCanvas(560, 560);
@@ -13,14 +15,11 @@ const Template = () => {
       p.draw = () => {
         p.background(0);
       };
+    };
+    let myp5 = new p5(sketch, sketchRef.current);
 
-      if (sketchRef.current === null) return;
-
-      let myp5 = new p5(sketch, sketchRef.current);
-
-      return () => {
-        myp5.remove();
-      };
+    return () => {
+      myp5.remove();
     };
   }, []);
 

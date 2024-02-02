@@ -46,7 +46,6 @@ const GameOfLife = () => {
       };
 
       p.draw = () => {
-        if (!isPausedRef.current) setFrameCount((prev) => prev + 1);
         p.background(black);
         for (let i = 0; i < rows; i++) {
           for (let j = 0; j < cols; j++) {
@@ -66,6 +65,7 @@ const GameOfLife = () => {
         cols: number
       ) => {
         if (isPausedRef.current) return grid;
+        setFrameCount((prev) => prev + 1);
         let newGrid = grid.map((row) => [...row]);
         for (let i = 0; i < rows; i++) {
           for (let j = 0; j < cols; j++) {
