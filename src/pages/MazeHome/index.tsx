@@ -26,7 +26,10 @@ const MazeHome = () => {
         gap: "4rem",
       }}
     >
-      <h1 style={{ margin: 0, padding: 0 }}>Maze Solving Playground</h1>
+      <div>
+        <h1 style={{ margin: 0, padding: 0 }}>Maze Solving Playground</h1>
+        <p style={{ margin: "10px", padding: 0 }}>No libs used!</p>
+      </div>
       <div>
         <Maze board={board} setBoard={setBoard} delay={300} />
         <i>Example: solving live using DFS</i>

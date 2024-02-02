@@ -12,7 +12,7 @@ const Footer = () => {
         <FontAwesomeIcon icon={faHeart} />
         <p>by</p>
         <a
-          href="https://github.com/yantavares/maze-visualization-playground"
+          href="https://github.com/yantavares/coding-challenges"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "beige", fontWeight: 500 }}

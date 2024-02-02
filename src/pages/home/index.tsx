@@ -11,7 +11,7 @@ const Home = () => {
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <Challenge
           name={"Sand Falling Game"}
-          info={"CelLular Automata to simmulate the behavior of sand"}
+          info={"Cellular Automata to simmulate the behavior of sand"}
           img={sand}
           url={"/sand-falling"}
         />
