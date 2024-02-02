@@ -25,6 +25,7 @@ const SandFalling = () => {
   const yellowMax = 70;
 
   useEffect(() => {
+    if (sketchRef.current === null) return;
     const sketch = (p: p5) => {
       p.setup = () => {
         p.createCanvas(560, 560);
@@ -128,8 +129,6 @@ const SandFalling = () => {
         updateGridForMouse(selectedButtonRef.current);
       };
     };
-
-    if (sketchRef.current === null) return;
 
     let myp5 = new p5(sketch, sketchRef.current);
 
