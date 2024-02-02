@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import p5 from "p5";
-import { initializeGrid } from "./utils";
+import { initializeGrid } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +32,7 @@ const SandFalling = () => {
         p.colorMode(p.HSB, 360, 255, 255);
         const cols = Math.floor(p.width / w);
         const rows = Math.floor(p.height / w);
-        grid = initializeGrid(cols, rows);
+        grid = initializeGrid(rows, cols);
       };
 
       p.draw = () => {
