@@ -139,16 +139,14 @@ const GameOfLife = () => {
           style={{
             display: "flex",
             gap: "1rem",
-            position: "absolute",
-            right: "19rem",
-            justifySelf: "flex-end",
-            alignSelf: "flex-end",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <p style={{ width: "6.7rem" }}>
+          <p style={{ width: "15rem" }}>
             Time passed: <a>{frameCount}</a>
           </p>
-          <p style={{ width: "8rem" }}>
+          <p style={{ width: "15rem" }}>
             Population count: <a>{population}</a>
           </p>
         </div>
