@@ -10,7 +10,10 @@ export const ChallengeContainer = styled.div`
   border-radius: 0.5rem;
   margin-top: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  width: 20rem;
+  width: 40%;
+  min-width: 16rem;
+  max-width: 20rem;
+  height: 28rem;
   transition: all 100ms ease-in-out;
   opacity: 0.9;
 
