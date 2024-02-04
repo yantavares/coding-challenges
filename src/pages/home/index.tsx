@@ -8,7 +8,15 @@ const Home = () => {
   return (
     <div>
       <h1>Coding Challenges with TS</h1>
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Challenge
           name={"Sand Falling Game"}
           info={"Cellular Automata to simmulate the behavior of sand"}
