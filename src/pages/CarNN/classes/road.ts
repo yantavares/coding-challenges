@@ -1,4 +1,4 @@
-import { lerp } from "../utils";
+import { Point, lerp } from "../utils";
 
 interface Road {
   x: number;
@@ -8,7 +8,18 @@ interface Road {
   right: number;
   top: number;
   bottom: number;
-  borders: { x: number; y: number }[][];
+  borders: RoadBorders;
+}
+
+export interface RoadBorders {
+  left: {
+    top: Point;
+    bottom: Point;
+  };
+  right: {
+    top: Point;
+    bottom: Point;
+  };
 }
 
 class Road {
@@ -30,10 +41,10 @@ class Road {
     const bottomRight = { x: this.right, y: this.bottom };
     const bottomLeft = { x: this.left, y: this.bottom };
 
-    this.borders = [
-      [topLeft, bottomLeft],
-      [topRight, bottomRight],
-    ];
+    this.borders = {
+      left: { top: topLeft, bottom: bottomLeft },
+      right: { top: topRight, bottom: bottomRight },
+    };
   }
 
   getLaneCenter(lane: number) {
@@ -58,14 +69,18 @@ class Road {
       ctx.lineTo(laneX, this.bottom);
       ctx.stroke();
     }
-
+    // Drawing the borders
     ctx.setLineDash([]);
-    this.borders.forEach((border) => {
-      ctx.beginPath();
-      ctx.moveTo(border[0].x, border[0].y);
-      ctx.lineTo(border[1].x, border[1].y);
-      ctx.stroke();
-    });
+
+    ctx.beginPath();
+    ctx.moveTo(this.borders.left.top.x, this.borders.left.top.y);
+    ctx.lineTo(this.borders.left.bottom.x, this.borders.left.bottom.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(this.borders.right.top.x, this.borders.right.top.y);
+    ctx.lineTo(this.borders.right.bottom.x, this.borders.right.bottom.y);
+    ctx.stroke();
   }
 }
 

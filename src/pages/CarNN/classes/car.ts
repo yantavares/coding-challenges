@@ -1,4 +1,5 @@
 import Controls from "./controls";
+import { RoadBorders } from "./road";
 import Sensor from "./sensor";
 
 interface Car {
@@ -33,7 +34,7 @@ class Car {
     this.controls = new Controls();
   }
 
-  update() {
+  update(roadBorders: RoadBorders) {
     this.#move_player();
     this.sensor.update();
   }
