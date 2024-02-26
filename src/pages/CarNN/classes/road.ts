@@ -43,7 +43,7 @@ class Road {
     );
   }
 
-  draw(ctx: any) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = "gray";
     ctx.lineWidth = 3;
     ctx.strokeStyle = "lightgray";

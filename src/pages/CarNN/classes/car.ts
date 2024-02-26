@@ -1,4 +1,5 @@
 import Controls from "./controls";
+import Sensor from "./sensor";
 
 interface Car {
   x: number;
@@ -11,7 +12,7 @@ interface Car {
   maxSpeed: number;
   friction: number;
   angle: number;
-  draw(ctx: { fillStyle: string; fillRect: any }): void;
+  sensor: Sensor;
 }
 
 class Car {
@@ -27,11 +28,14 @@ class Car {
     this.friction = 0.05;
     this.angle = 0;
 
+    this.sensor = new Sensor(this);
+
     this.controls = new Controls();
   }
 
   update() {
     this.#move_player();
+    this.sensor.update();
   }
 
   #move_player() {
@@ -77,7 +81,7 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx: any) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(-this.angle);
@@ -88,6 +92,8 @@ class Car {
     ctx.fill();
 
     ctx.restore();
+
+    this.sensor.draw(ctx);
   }
 }
 
