@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import GameOfLife from "./pages/GameOfLife";
 import MazeHome from "./pages/MazeHome";
 import MazeCreator from "./pages/MazeCreator";
+import CarNN from "./pages/CarNN";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/sand-falling" element={<SandFalling />} />
           <Route path="/game-of-life" element={<GameOfLife />} />
           <Route path="/maze-playground" element={<MazeHome />} />
+          <Route path="/carNN" element={<CarNN />} />
           <Route
             path="/maze-playground/maze-creator"
             element={<MazeCreator />}
