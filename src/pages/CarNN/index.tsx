@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import Car from "./car";
-import Road from "./road";
+import Car from "./classes/car";
+import Road from "./classes/road";
 import { Canvas, CanvasContainer } from "./styles";
 
 const CarNN = () => {
