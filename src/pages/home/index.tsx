@@ -6,7 +6,14 @@ import maze from "../../assets/maze.png";
 
 const Home = () => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        placeItems: "center",
+        flexDirection: "column",
+        width: "100%",
+      }}
+    >
       <h1>Coding Challenges with TS</h1>
       <div
         style={{

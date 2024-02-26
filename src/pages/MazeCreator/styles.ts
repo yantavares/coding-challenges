@@ -4,7 +4,10 @@ export const MazeCreatorContainer = styled.div`
   display: flex;
   height: 100%;
   place-items: center;
+  justify-content: center;
+  width: 100vw;
   gap: 2rem;
+  margin: 0 auto;
 `;
 
 export const ButtonContainer = styled.div`

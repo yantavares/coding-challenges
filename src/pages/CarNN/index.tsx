@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Car from "./car";
+import Road from "./road";
 import { Canvas, CanvasContainer } from "./styles";
 
 const CarNN = () => {
@@ -12,36 +13,22 @@ const CarNN = () => {
 
       const ctx = canvas.getContext("2d");
 
-      function drawCanvas() {
-        ctx.fillStyle = "gray";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        const stripeWidth = 5;
-        const stripeHeight = 30;
-        const spaceBetweenStripes = 50;
-        ctx.fillStyle = "yellow";
-
-        // Drawing lane stripes
-        for (
-          let y = 0;
-          y < canvas.height;
-          y += stripeHeight + spaceBetweenStripes
-        ) {
-          const x = canvas.width / 2 - stripeWidth / 2;
-          ctx.fillRect(x, y, stripeWidth, stripeHeight);
-        }
-      }
-
-      const car = new Car(100, 100, 30, 50);
+      const road = new Road(canvas.width / 2, canvas.width * 0.9);
+      const car = new Car(road.getLaneCenter(1), 100, 30, 50);
 
       animate();
 
       function animate() {
         car.update();
         canvas.height = window.innerHeight;
-        drawCanvas();
 
+        ctx.save();
+        ctx.translate(0, -car.y + window.innerHeight * 0.7);
+
+        road.draw(ctx);
         car.draw(ctx);
+
+        ctx.restore();
         requestAnimationFrame(animate);
       }
     }

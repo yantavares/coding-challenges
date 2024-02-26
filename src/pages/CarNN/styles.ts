@@ -7,4 +7,6 @@ export const CanvasContainer = styled.div`
   width: 100vw;
 `;
 
-export const Canvas = styled.canvas``;
+export const Canvas = styled.canvas`
+  background-color: gray;
+`;
