@@ -7,6 +7,7 @@ import {
   NetworkCanvas,
   ButtonsContainer,
   MainContainer,
+  InfoDisplay,
 } from "./styles";
 import Visualizer from "./classes/visualizer.js";
 import { NeuralNetwork } from "./classes/network";
@@ -15,20 +16,44 @@ const CarNN = () => {
   const carCanvasRef = useRef(null);
   const networkCanvasRef = useRef(null);
   const [toggleReload, setToggleReload] = useState(false);
+  const [countdown, setCountdown] = useState(10);
+  const [bestDistance, setBestDistance] = useState(0);
+  const [bestGlobalDistance, setBestGlobalDistance] = useState(0);
+  const [generation, setGeneration] = useState(1);
 
   let bestCar: Car;
 
+  const generateTraffic = (road: Road) => {
+    return [
+      new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(2), -300, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(1), -500, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(2), -500, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(0), -800, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(2), -800, 30, 50, "NPC", 2),
+    ];
+  };
+
   function saveBestCar() {
     localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
-    alert("Best car saved");
   }
 
-  function discardBestCar() {
-    if (localStorage.getItem("bestBrain")) {
-      localStorage.removeItem("bestBrain");
-      alert("Best car discarded");
-    } else alert("No best car to discard");
-  }
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown === 1) {
+          saveBestCar();
+          setToggleReload((prev) => !prev);
+          setGeneration((prevGen) => prevGen + 1);
+          return 10;
+        }
+        return prevCountdown - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const carCanvas = carCanvasRef.current;
@@ -42,31 +67,19 @@ const CarNN = () => {
       const networkCtx = networkCanvas.getContext("2d");
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-
       const cars = generateCars(100);
-
       bestCar = cars[0];
+
+      let traffic = generateTraffic(road);
 
       if (localStorage.getItem("bestBrain")) {
         for (let i = 0; i < cars.length; i++) {
           cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
           if (i !== 0) {
-            NeuralNetwork.mutate(cars[i].brain, 0.15);
+            NeuralNetwork.mutate(cars[i].brain, 0.3);
           }
         }
       }
-
-      const traffic = [
-        new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(2), -300, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(1), -500, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(2), -500, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(0), -800, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(2), -800, 30, 50, "NPC", 2),
-      ];
-
-      animate();
 
       function generateCars(n: number) {
         const cars = [];
@@ -77,6 +90,10 @@ const CarNN = () => {
       }
 
       function animate(time = null) {
+        if (time % 10000 === 0) {
+          traffic.push(...generateTraffic(road));
+        }
+
         traffic.forEach((car) => {
           car.update(road.borders);
         });
@@ -88,6 +105,11 @@ const CarNN = () => {
         bestCar = cars.find(
           (car: Car) => car.y === Math.min(...cars.map((c: Car) => c.y))
         );
+        setBestDistance(-bestCar.y);
+
+        if (bestGlobalDistance < bestDistance) {
+          setBestGlobalDistance(bestDistance);
+        }
 
         carCanvas.height = window.innerHeight;
         networkCanvas.height = window.innerHeight;
@@ -117,6 +139,8 @@ const CarNN = () => {
 
         requestAnimationFrame(animate);
       }
+
+      animate();
     }
   }, [toggleReload]);
 
@@ -124,11 +148,12 @@ const CarNN = () => {
     <CanvasContainer>
       <MainContainer>
         <CarCanvas ref={carCanvasRef} />
-        <ButtonsContainer>
-          <button onClick={saveBestCar}>Save Best Car</button>
-          <button onClick={discardBestCar}>Discard Best Car</button>
-          <button onClick={() => setToggleReload(!toggleReload)}>Reload</button>
-        </ButtonsContainer>
+        <InfoDisplay>
+          <p>Countdown: {countdown}s</p>
+          <p>Best Distance: {bestGlobalDistance.toFixed(2)} </p>
+          <p>Generation: {generation}</p>
+          <ButtonsContainer></ButtonsContainer>
+        </InfoDisplay>
       </MainContainer>
       <NetworkCanvas ref={networkCanvasRef} />
     </CanvasContainer>
