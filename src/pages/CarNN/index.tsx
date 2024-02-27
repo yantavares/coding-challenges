@@ -8,6 +8,7 @@ import {
   ButtonsContainer,
 } from "./styles";
 import Visualizer from "./classes/visualizer.js";
+import { NeuralNetwork } from "./classes/network";
 
 const CarNN = () => {
   const carCanvasRef = useRef(null);
@@ -46,10 +47,24 @@ const CarNN = () => {
       bestCar = cars[0];
 
       if (localStorage.getItem("bestBrain")) {
-        bestCar.brain = JSON.parse(localStorage.getItem("bestBrain"));
+        for (let i = 0; i < cars.length; i++) {
+          cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+          if (i !== 0) {
+            NeuralNetwork.mutate(cars[i].brain, 0.15);
+          }
+        }
       }
 
-      const traffic = [new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2)];
+      const traffic = [
+        new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(2), -300, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(1), -500, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(2), -500, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(0), -800, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(2), -800, 30, 50, "NPC", 2),
+        new Car(road.getLaneCenter(1), -1000, 30, 50, "NPC", 2),
+      ];
 
       animate();
 
