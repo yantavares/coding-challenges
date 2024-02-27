@@ -160,16 +160,16 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx: CanvasRenderingContext2D, color: string = "blue") {
-    ctx.fillStyle = this.damaged ? "black" : color;
-    ctx.beginPath();
-    ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
+  draw(carCtx: CanvasRenderingContext2D, color: string = "blue") {
+    carCtx.fillStyle = this.damaged ? "black" : color;
+    carCtx.beginPath();
+    carCtx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
-      ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+      carCtx.lineTo(this.polygon[i].x, this.polygon[i].y);
     }
-    ctx.fill();
+    carCtx.fill();
 
-    if (this.sensor) this.sensor.draw(ctx);
+    if (this.sensor) this.sensor.draw(carCtx);
   }
 }
 

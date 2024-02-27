@@ -1,19 +1,20 @@
 import React, { useRef, useEffect } from "react";
 import Car from "./classes/car";
 import Road from "./classes/road";
-import { Canvas, CanvasContainer } from "./styles";
+import { CarCanvas, CanvasContainer, NetworkCanvas } from "./styles";
 
 const CarNN = () => {
-  const canvasRef = useRef(null);
+  const carCanvasRef = useRef(null);
+  const networkCanvasRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      canvas.width = 200;
+    const carCanvas = carCanvasRef.current;
+    if (carCanvas) {
+      carCanvas.width = 200;
 
-      const ctx = canvas.getContext("2d");
+      const carCtx = carCanvas.getContext("2d");
 
-      const road = new Road(canvas.width / 2, canvas.width * 0.9);
+      const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
       const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
       const traffic = [new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2)];
 
@@ -24,28 +25,37 @@ const CarNN = () => {
           car.update(road.borders);
         });
         car.update(road.borders, traffic);
-        canvas.height = window.innerHeight;
+        carCanvas.height = window.innerHeight;
 
-        ctx.save();
-        ctx.translate(0, -car.y + window.innerHeight * 0.7);
+        carCtx.save();
+        carCtx.translate(0, -car.y + window.innerHeight * 0.7);
 
-        road.draw(ctx);
+        road.draw(carCtx);
 
         traffic.forEach((car) => {
-          car.draw(ctx, "red");
+          car.draw(carCtx, "red");
         });
 
-        car.draw(ctx);
+        car.draw(carCtx);
 
-        ctx.restore();
+        carCtx.restore();
         requestAnimationFrame(animate);
       }
     }
   }, []);
 
+  useEffect(() => {
+    const networkCanvas = networkCanvasRef.current;
+    if (networkCanvas) {
+      networkCanvas.width = 200;
+      networkCanvas.height = 200;
+    }
+  }, []);
+
   return (
     <CanvasContainer>
-      <Canvas ref={canvasRef} />
+      <CarCanvas ref={carCanvasRef} />
+      <NetworkCanvas ref={networkCanvasRef} />
     </CanvasContainer>
   );
 };

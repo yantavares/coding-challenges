@@ -113,26 +113,26 @@ class Sensor {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(carCtx: CanvasRenderingContext2D) {
     for (let i = 0; i < this.rayCount; i++) {
       let rayEnd = this.rays[i].end;
       if (this.readings[i]) {
         rayEnd = this.readings[i];
       }
 
-      ctx.beginPath();
-      ctx.strokeStyle = "yellow";
-      ctx.lineWidth = 2;
-      ctx.moveTo(this.rays[i].start.x, this.rays[i].start.y);
-      ctx.lineTo(rayEnd.x, rayEnd.y);
-      ctx.stroke();
+      carCtx.beginPath();
+      carCtx.strokeStyle = "yellow";
+      carCtx.lineWidth = 2;
+      carCtx.moveTo(this.rays[i].start.x, this.rays[i].start.y);
+      carCtx.lineTo(rayEnd.x, rayEnd.y);
+      carCtx.stroke();
 
-      ctx.beginPath();
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-      ctx.moveTo(this.rays[i].end.x, this.rays[i].end.y);
-      ctx.lineTo(rayEnd.x, rayEnd.y);
-      ctx.stroke();
+      carCtx.beginPath();
+      carCtx.strokeStyle = "black";
+      carCtx.lineWidth = 2;
+      carCtx.moveTo(this.rays[i].end.x, this.rays[i].end.y);
+      carCtx.lineTo(rayEnd.x, rayEnd.y);
+      carCtx.stroke();
     }
   }
 }

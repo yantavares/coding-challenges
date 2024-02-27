@@ -54,33 +54,33 @@ class Road {
     );
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = "gray";
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "lightgray";
+  draw(carCtx: CanvasRenderingContext2D) {
+    carCtx.fillStyle = "gray";
+    carCtx.lineWidth = 3;
+    carCtx.strokeStyle = "lightgray";
 
     for (let i = 1; i <= this.laneCount - 1; i++) {
       const laneX = lerp(this.left, this.right, i / this.laneCount);
 
-      ctx.setLineDash([20, 20]);
+      carCtx.setLineDash([20, 20]);
 
-      ctx.beginPath();
-      ctx.moveTo(laneX, this.top);
-      ctx.lineTo(laneX, this.bottom);
-      ctx.stroke();
+      carCtx.beginPath();
+      carCtx.moveTo(laneX, this.top);
+      carCtx.lineTo(laneX, this.bottom);
+      carCtx.stroke();
     }
     // Drawing the borders
-    ctx.setLineDash([]);
+    carCtx.setLineDash([]);
 
-    ctx.beginPath();
-    ctx.moveTo(this.borders.left.top.x, this.borders.left.top.y);
-    ctx.lineTo(this.borders.left.bottom.x, this.borders.left.bottom.y);
-    ctx.stroke();
+    carCtx.beginPath();
+    carCtx.moveTo(this.borders.left.top.x, this.borders.left.top.y);
+    carCtx.lineTo(this.borders.left.bottom.x, this.borders.left.bottom.y);
+    carCtx.stroke();
 
-    ctx.beginPath();
-    ctx.moveTo(this.borders.right.top.x, this.borders.right.top.y);
-    ctx.lineTo(this.borders.right.bottom.x, this.borders.right.bottom.y);
-    ctx.stroke();
+    carCtx.beginPath();
+    carCtx.moveTo(this.borders.right.top.x, this.borders.right.top.y);
+    carCtx.lineTo(this.borders.right.bottom.x, this.borders.right.bottom.y);
+    carCtx.stroke();
   }
 }
 
