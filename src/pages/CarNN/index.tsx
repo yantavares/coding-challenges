@@ -25,9 +25,9 @@ const CarNN = () => {
 
   const generateTraffic = (road: Road) => {
     return [
-      new Car(road.getLaneCenter(0), 350, 30, 50, "NPC", 3.2),
-      new Car(road.getLaneCenter(1), 350, 30, 50, "NPC", 3.2),
-      new Car(road.getLaneCenter(2), 350, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(0), 380, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(1), 380, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(2), 380, 30, 50, "NPC", 3.2),
 
       new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
@@ -71,7 +71,7 @@ const CarNN = () => {
       const networkCtx = networkCanvas.getContext("2d");
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-      const cars = generateCars(200);
+      const cars = generateCars(400);
       bestCar = cars[0];
 
       let traffic = generateTraffic(road);
