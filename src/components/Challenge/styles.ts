@@ -23,7 +23,7 @@ export const ChallengeContainer = styled.div`
 
 export const ChallengeImage = styled.img`
   width: 100%;
-  height: 15rem;
+  height: 14rem;
   object-fit: cover;
   border-radius: 0.5rem;
 `;
