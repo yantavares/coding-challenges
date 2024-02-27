@@ -24,8 +24,8 @@ export const ChallengesContainer = styled.div`
 `;
 
 export const MainHeader = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
   color: transparent;
   background-image: linear-gradient(90deg, aliceblue, lightblue);
   background-clip: text;
@@ -33,7 +33,7 @@ export const MainHeader = styled.h1`
 `;
 
 export const Language = styled.i`
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: transparent;
   background-image: linear-gradient(90deg, #007acc, #00bacc);
   background-clip: text;
