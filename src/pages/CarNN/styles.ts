@@ -34,4 +34,5 @@ export const InfoDisplay = styled.div`
   gap: 1rem;
   align-items: center;
   justify-content: center;
+  width: 10rem;
 `;

@@ -16,7 +16,7 @@ const CarNN = () => {
   const carCanvasRef = useRef(null);
   const networkCanvasRef = useRef(null);
   const [toggleReload, setToggleReload] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(12);
   const [bestDistance, setBestDistance] = useState(0);
   const [bestGlobalDistance, setBestGlobalDistance] = useState(0);
   const [generation, setGeneration] = useState(1);
@@ -25,6 +25,10 @@ const CarNN = () => {
 
   const generateTraffic = (road: Road) => {
     return [
+      new Car(road.getLaneCenter(0), 350, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(1), 350, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(2), 350, 30, 50, "NPC", 3.2),
+
       new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(2), -300, 30, 50, "NPC", 2),
@@ -46,7 +50,7 @@ const CarNN = () => {
           saveBestCar();
           setToggleReload((prev) => !prev);
           setGeneration((prevGen) => prevGen + 1);
-          return 10;
+          return 12;
         }
         return prevCountdown - 1;
       });
@@ -67,7 +71,7 @@ const CarNN = () => {
       const networkCtx = networkCanvas.getContext("2d");
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-      const cars = generateCars(100);
+      const cars = generateCars(500);
       bestCar = cars[0];
 
       let traffic = generateTraffic(road);
@@ -76,7 +80,7 @@ const CarNN = () => {
         for (let i = 0; i < cars.length; i++) {
           cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
           if (i !== 0) {
-            NeuralNetwork.mutate(cars[i].brain, 0.3);
+            NeuralNetwork.mutate(cars[i].brain, 0.1);
           }
         }
       }
@@ -150,7 +154,10 @@ const CarNN = () => {
         <CarCanvas ref={carCanvasRef} />
         <InfoDisplay>
           <p>Countdown: {countdown}s</p>
-          <p>Best Distance: {bestGlobalDistance.toFixed(2)} </p>
+          <p style={{ width: "100%" }}>
+            Current Distance: {bestDistance < 0 ? 0.0 : bestDistance.toFixed(1)}
+          </p>
+          <p>Best Distance: {bestGlobalDistance.toFixed(1)} </p>
           <p>Generation: {generation}</p>
           <ButtonsContainer></ButtonsContainer>
         </InfoDisplay>
