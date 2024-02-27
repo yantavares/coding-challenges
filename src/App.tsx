@@ -4,8 +4,8 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import SandFalling from "./pages/SandFalling";
 import Home from "./pages/home";
 import GameOfLife from "./pages/GameOfLife";
-import MazeHome from "./pages/MazeHome";
-import MazeCreator from "./pages/MazeCreator";
+import MazeHome from "./pages/MazePlayground/MazeHome";
+import MazeCreator from "./pages/MazePlayground/MazeCreator";
 import CarNN from "./pages/CarNN";
 import "./App.css";
 

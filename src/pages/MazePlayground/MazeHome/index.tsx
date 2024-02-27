@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Maze from "../../components/HomeMaze";
+import Maze from "../../../components/HomeMaze";
 import { CancelButton, StartButton } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";

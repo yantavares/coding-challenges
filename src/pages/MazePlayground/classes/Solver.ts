@@ -1,4 +1,4 @@
-import { Board, Position, BLOCKED } from "../../types/mazeTypes";
+import { Board, Position, BLOCKED } from "../../../types/mazeTypes";
 
 export abstract class Solver {
   protected board: Board;
