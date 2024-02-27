@@ -138,8 +138,8 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.damaged ? "orange" : "black";
+  draw(ctx: CanvasRenderingContext2D, color: string = "blue") {
+    ctx.fillStyle = this.damaged ? "black" : color;
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {

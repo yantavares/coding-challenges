@@ -32,7 +32,7 @@ const CarNN = () => {
         road.draw(ctx);
 
         traffic.forEach((car) => {
-          car.draw(ctx);
+          car.draw(ctx, "red");
         });
 
         car.draw(ctx);

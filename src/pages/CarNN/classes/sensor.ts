@@ -35,31 +35,52 @@ class Sensor {
     this.#castRays();
     this.readings = [];
     for (let i = 0; i < this.rays.length; i++) {
-      this.readings.push(this.#getReading(this.rays[i], roadBorders));
+      this.readings.push(this.#getReading(this.rays[i], roadBorders, traffic));
     }
   }
 
-  #getReading(ray: Ray, roadBorders: RoadBorders) {
+  #getReading(
+    ray: Ray,
+    roadBorders: RoadBorders,
+    traffic: Car[] = []
+  ): Intersection {
     let touches = [];
 
-    const touch = getIntersection(
+    // Check for intersection with traffic
+    for (let i = 0; i < traffic.length; i++) {
+      const car = traffic[i];
+      for (let j = 0; j < car.polygon.length; j++) {
+        const next = (j + 1) % car.polygon.length;
+        const touch = getIntersection(
+          ray.start,
+          ray.end,
+          car.polygon[j],
+          car.polygon[next]
+        );
+        if (touch) {
+          touches.push(touch);
+        }
+      }
+    }
+
+    const roadTouch = getIntersection(
       ray.start,
       ray.end,
       roadBorders.left.top,
       roadBorders.left.bottom
     );
-    if (touch) {
-      touches.push(touch);
+    if (roadTouch) {
+      touches.push(roadTouch);
     }
 
-    const touch2 = getIntersection(
+    const roadTouch2 = getIntersection(
       ray.start,
       ray.end,
       roadBorders.right.top,
       roadBorders.right.bottom
     );
-    if (touch2) {
-      touches.push(touch2);
+    if (roadTouch2) {
+      touches.push(roadTouch2);
     }
 
     const offsets = touches.map((touch) => touch.offset);
