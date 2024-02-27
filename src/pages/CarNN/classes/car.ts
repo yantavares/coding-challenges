@@ -20,6 +20,7 @@ interface Car {
   damaged: boolean;
   type: string;
   brain: NeuralNetwork;
+  useBrain: boolean;
 }
 
 class Car {
@@ -44,7 +45,9 @@ class Car {
     this.angle = 0;
     this.damaged = false;
 
-    if (this.type === "PLAYER") {
+    this.useBrain = this.type === "AI";
+
+    if (this.type !== "NPC") {
       this.sensor = new Sensor(this);
       this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
@@ -68,7 +71,13 @@ class Car {
       );
 
       const outputs = NeuralNetwork.feedForward(offsets, this.brain);
-      console.log(outputs);
+
+      if (this.useBrain) {
+        this.controls.up = outputs[0] > 0.5;
+        this.controls.down = outputs[1] > 0.5;
+        this.controls.left = outputs[2] > 0.5;
+        this.controls.right = outputs[3] > 0.5;
+      }
     }
   }
 
