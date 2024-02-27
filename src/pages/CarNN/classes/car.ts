@@ -1,4 +1,4 @@
-import { Point } from "../utils";
+import { Point, polysIntersect } from "../utils";
 import Controls from "./controls";
 import { RoadBorders } from "./road";
 import Sensor from "./sensor";
@@ -16,6 +16,7 @@ interface Car {
   angle: number;
   sensor: Sensor;
   polygon: Point[];
+  damaged: boolean;
 }
 
 class Car {
@@ -30,6 +31,7 @@ class Car {
     this.maxSpeed = 3;
     this.friction = 0.05;
     this.angle = 0;
+    this.damaged = false;
 
     this.sensor = new Sensor(this);
 
@@ -39,7 +41,20 @@ class Car {
   update(roadBorders: RoadBorders) {
     this.#move_player();
     this.polygon = this.#create_polygon();
+    this.damaged = this.#assessDamage(roadBorders);
     this.sensor.update(roadBorders);
+  }
+
+  #assessDamage(roadBorders: RoadBorders) {
+    if (polysIntersect(this.polygon, roadBorders.left)) {
+      console.log("hit left");
+      return true;
+    }
+    if (polysIntersect(this.polygon, roadBorders.right)) {
+      console.log("hit right");
+      return true;
+    }
+    return false;
   }
 
   #create_polygon() {
@@ -109,8 +124,8 @@ class Car {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    ctx.fillStyle = this.damaged ? "red" : "black";
     ctx.beginPath();
-    ctx.fillStyle = "black";
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y);

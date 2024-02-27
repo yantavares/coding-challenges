@@ -28,3 +28,16 @@ export function getIntersection(a: Point, b: Point, c: Point, d: Point) {
     };
   }
 }
+
+export function polysIntersect(
+  poly1: Point[],
+  poly2: { top: Point; bottom: Point }
+) {
+  for (let i = 0; i < poly1.length; i++) {
+    const next = (i + 1) % poly1.length;
+    if (getIntersection(poly1[i], poly1[next], poly2.top, poly2.bottom)) {
+      return true;
+    }
+  }
+  return false;
+}
