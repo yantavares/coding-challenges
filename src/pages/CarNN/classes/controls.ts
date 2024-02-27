@@ -7,13 +7,24 @@ interface Controls {
 }
 
 class Controls {
-  constructor() {
+  constructor(type: string) {
     this.left = false;
     this.right = false;
     this.up = false;
     this.down = false;
 
-    this.#addKeyboardListeners();
+    switch (type) {
+      case "PLAYER":
+        this.#addKeyboardListeners();
+        break;
+
+      case "NPC":
+        this.up = true;
+        break;
+
+      default:
+        break;
+    }
   }
 
   // private method

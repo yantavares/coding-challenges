@@ -17,25 +17,36 @@ interface Car {
   sensor: Sensor;
   polygon: Point[];
   damaged: boolean;
+  type: string;
 }
 
 class Car {
-  constructor(x: number, y: number, width: number, height: number) {
+  constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    type: string,
+    maxSpeed: number = 3
+  ) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.type = type;
 
     this.speed = 0;
     this.acceleration = 0.2;
-    this.maxSpeed = 3;
+    this.maxSpeed = maxSpeed;
     this.friction = 0.05;
     this.angle = 0;
     this.damaged = false;
 
-    this.sensor = new Sensor(this);
+    if (this.type === "PLAYER") {
+      this.sensor = new Sensor(this);
+    }
 
-    this.controls = new Controls();
+    this.controls = new Controls(this.type);
   }
 
   update(roadBorders: RoadBorders) {
@@ -45,7 +56,7 @@ class Car {
       this.damaged = this.#assessDamage(roadBorders);
     }
 
-    this.sensor.update(roadBorders);
+    if (this.sensor) this.sensor.update(roadBorders);
   }
 
   #assessDamage(roadBorders: RoadBorders) {
@@ -133,7 +144,7 @@ class Car {
     }
     ctx.fill();
 
-    this.sensor.draw(ctx);
+    if (this.sensor) this.sensor.draw(ctx);
   }
 }
 
