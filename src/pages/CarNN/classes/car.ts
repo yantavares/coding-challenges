@@ -1,4 +1,4 @@
-import { Point, polysIntersect } from "../utils";
+import { Point, polysIntersect, polysIntersectRoad } from "../utils";
 import Controls from "./controls";
 import { RoadBorders } from "./road";
 import Sensor from "./sensor";
@@ -27,7 +27,7 @@ class Car {
     width: number,
     height: number,
     type: string,
-    maxSpeed: number = 3
+    maxSpeed: number = 5
   ) {
     this.x = x;
     this.y = y;
@@ -49,21 +49,24 @@ class Car {
     this.controls = new Controls(this.type);
   }
 
-  update(roadBorders: RoadBorders) {
+  update(roadBorders: RoadBorders, traffic: Car[] = []) {
     if (!this.damaged) {
       this.#move_player();
       this.polygon = this.#create_polygon();
-      this.damaged = this.#assessDamage(roadBorders);
+      this.damaged = this.#assessDamage(roadBorders, traffic);
     }
 
-    if (this.sensor) this.sensor.update(roadBorders);
+    if (this.sensor) this.sensor.update(roadBorders, traffic);
   }
 
-  #assessDamage(roadBorders: RoadBorders) {
-    if (polysIntersect(this.polygon, roadBorders.left)) {
+  #assessDamage(roadBorders: RoadBorders, traffic: Car[]) {
+    if (polysIntersectRoad(this.polygon, roadBorders.left)) {
       return true;
     }
-    if (polysIntersect(this.polygon, roadBorders.right)) {
+    if (polysIntersectRoad(this.polygon, roadBorders.right)) {
+      return true;
+    }
+    if (traffic.some((car) => polysIntersect(this.polygon, car.polygon))) {
       return true;
     }
     return false;

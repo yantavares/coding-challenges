@@ -29,7 +29,7 @@ export function getIntersection(a: Point, b: Point, c: Point, d: Point) {
   }
 }
 
-export function polysIntersect(
+export function polysIntersectRoad(
   poly1: Point[],
   poly2: { top: Point; bottom: Point }
 ) {
@@ -37,6 +37,19 @@ export function polysIntersect(
     const next = (i + 1) % poly1.length;
     if (getIntersection(poly1[i], poly1[next], poly2.top, poly2.bottom)) {
       return true;
+    }
+  }
+  return false;
+}
+
+export function polysIntersect(poly1: Point[], poly2: Point[]) {
+  for (let i = 0; i < poly1.length; i++) {
+    for (let j = 0; j < poly2.length; j++) {
+      const next = (i + 1) % poly1.length;
+      const next2 = (j + 1) % poly2.length;
+      if (getIntersection(poly1[i], poly1[next], poly2[j], poly2[next2])) {
+        return true;
+      }
     }
   }
   return false;

@@ -23,7 +23,7 @@ const CarNN = () => {
         traffic.forEach((car) => {
           car.update(road.borders);
         });
-        car.update(road.borders);
+        car.update(road.borders, traffic);
         canvas.height = window.innerHeight;
 
         ctx.save();

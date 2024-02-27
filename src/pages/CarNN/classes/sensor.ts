@@ -31,7 +31,7 @@ class Sensor {
     this.rays = [];
   }
 
-  update(roadBorders: RoadBorders) {
+  update(roadBorders: RoadBorders, traffic: Car[] = []) {
     this.#castRays();
     this.readings = [];
     for (let i = 0; i < this.rays.length; i++) {
