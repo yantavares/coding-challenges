@@ -39,19 +39,20 @@ class Car {
   }
 
   update(roadBorders: RoadBorders) {
-    this.#move_player();
-    this.polygon = this.#create_polygon();
-    this.damaged = this.#assessDamage(roadBorders);
+    if (!this.damaged) {
+      this.#move_player();
+      this.polygon = this.#create_polygon();
+      this.damaged = this.#assessDamage(roadBorders);
+    }
+
     this.sensor.update(roadBorders);
   }
 
   #assessDamage(roadBorders: RoadBorders) {
     if (polysIntersect(this.polygon, roadBorders.left)) {
-      console.log("hit left");
       return true;
     }
     if (polysIntersect(this.polygon, roadBorders.right)) {
-      console.log("hit right");
       return true;
     }
     return false;
@@ -124,7 +125,7 @@ class Car {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.damaged ? "red" : "black";
+    ctx.fillStyle = this.damaged ? "orange" : "black";
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
