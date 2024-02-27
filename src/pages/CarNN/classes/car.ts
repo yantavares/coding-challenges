@@ -1,3 +1,4 @@
+import { Point } from "../utils";
 import Controls from "./controls";
 import { RoadBorders } from "./road";
 import Sensor from "./sensor";
@@ -14,6 +15,7 @@ interface Car {
   friction: number;
   angle: number;
   sensor: Sensor;
+  polygon: Point[];
 }
 
 class Car {
@@ -36,7 +38,31 @@ class Car {
 
   update(roadBorders: RoadBorders) {
     this.#move_player();
-    this.sensor.update();
+    this.polygon = this.#create_polygon();
+    this.sensor.update(roadBorders);
+  }
+
+  #create_polygon() {
+    const points = [];
+    const rad = Math.hypot(this.width, this.height) / 2;
+    const alpha = Math.atan2(this.width, this.height);
+    points.push({
+      x: this.x - Math.sin(this.angle - alpha) * rad,
+      y: this.y - Math.cos(this.angle - alpha) * rad,
+    });
+    points.push({
+      x: this.x - Math.sin(this.angle + alpha) * rad,
+      y: this.y - Math.cos(this.angle + alpha) * rad,
+    });
+    points.push({
+      x: this.x - Math.sin(Math.PI + this.angle - alpha) * rad,
+      y: this.y - Math.cos(Math.PI + this.angle - alpha) * rad,
+    });
+    points.push({
+      x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
+      y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
+    });
+    return points;
   }
 
   #move_player() {
@@ -83,16 +109,13 @@ class Car {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(-this.angle);
-
     ctx.beginPath();
-    ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     ctx.fillStyle = "black";
+    ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
+    for (let i = 1; i < this.polygon.length; i++) {
+      ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+    }
     ctx.fill();
-
-    ctx.restore();
 
     this.sensor.draw(ctx);
   }

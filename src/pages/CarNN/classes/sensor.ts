@@ -1,6 +1,13 @@
 import { lerp } from "../utils";
 import Car from "./car";
+import { RoadBorders } from "./road";
+import { getIntersection } from "../utils";
 
+interface Intersection {
+  x: number;
+  y: number;
+  offset: number;
+}
 interface Ray {
   start: { x: number; y: number };
   end: { x: number; y: number };
@@ -11,6 +18,7 @@ interface Sensor {
   rayCount: number;
   rayLength: number;
   raySpread: number;
+  readings: Intersection[];
 }
 
 class Sensor {
@@ -23,8 +31,42 @@ class Sensor {
     this.rays = [];
   }
 
-  update() {
+  update(roadBorders: RoadBorders) {
     this.#castRays();
+    this.readings = [];
+    for (let i = 0; i < this.rays.length; i++) {
+      this.readings.push(this.#getReading(this.rays[i], roadBorders));
+    }
+  }
+
+  #getReading(ray: Ray, roadBorders: RoadBorders) {
+    let touches = [];
+
+    const touch = getIntersection(
+      ray.start,
+      ray.end,
+      roadBorders.left.top,
+      roadBorders.left.bottom
+    );
+    if (touch) {
+      touches.push(touch);
+    }
+
+    const touch2 = getIntersection(
+      ray.start,
+      ray.end,
+      roadBorders.right.top,
+      roadBorders.right.bottom
+    );
+    if (touch2) {
+      touches.push(touch2);
+    }
+
+    const offsets = touches.map((touch) => touch.offset);
+    const closest = Math.min(...offsets);
+    const closestTouch = touches.find((touch) => touch.offset === closest);
+
+    return closestTouch;
   }
 
   #castRays() {
@@ -51,14 +93,26 @@ class Sensor {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.strokeStyle = "yellow";
-    this.rays.forEach((ray) => {
+    for (let i = 0; i < this.rayCount; i++) {
+      let rayEnd = this.rays[i].end;
+      if (this.readings[i]) {
+        rayEnd = this.readings[i];
+      }
+
       ctx.beginPath();
+      ctx.strokeStyle = "yellow";
       ctx.lineWidth = 2;
-      ctx.moveTo(ray.start.x, ray.start.y);
-      ctx.lineTo(ray.end.x, ray.end.y);
+      ctx.moveTo(this.rays[i].start.x, this.rays[i].start.y);
+      ctx.lineTo(rayEnd.x, rayEnd.y);
       ctx.stroke();
-    });
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
+      ctx.moveTo(this.rays[i].end.x, this.rays[i].end.y);
+      ctx.lineTo(rayEnd.x, rayEnd.y);
+      ctx.stroke();
+    }
   }
 }
 
