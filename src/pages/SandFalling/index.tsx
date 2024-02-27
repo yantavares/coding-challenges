@@ -143,7 +143,16 @@ const SandFalling = () => {
   };
 
   return (
-    <div style={{ display: "flex", gap: "1rem" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        width: "100%",
+        height: "100%",
+        placeItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <div
         style={{
           display: "flex",
