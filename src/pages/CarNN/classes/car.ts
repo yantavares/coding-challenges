@@ -1,5 +1,6 @@
 import { Point, polysIntersect, polysIntersectRoad } from "../utils";
 import Controls from "./controls";
+import { NeuralNetwork } from "./network";
 import { RoadBorders } from "./road";
 import Sensor from "./sensor";
 
@@ -18,6 +19,7 @@ interface Car {
   polygon: Point[];
   damaged: boolean;
   type: string;
+  brain: NeuralNetwork;
 }
 
 class Car {
@@ -44,6 +46,7 @@ class Car {
 
     if (this.type === "PLAYER") {
       this.sensor = new Sensor(this);
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
 
     this.controls = new Controls(this.type);
@@ -56,7 +59,17 @@ class Car {
       this.damaged = this.#assessDamage(roadBorders, traffic);
     }
 
-    if (this.sensor) this.sensor.update(roadBorders, traffic);
+    if (this.sensor) {
+      this.sensor.update(roadBorders, traffic);
+
+      // Higher values if danger is close
+      const offsets = this.sensor.readings.map((sensor) =>
+        sensor == null ? 0 : 1 - sensor.offset
+      );
+
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain);
+      console.log(outputs);
+    }
   }
 
   #assessDamage(roadBorders: RoadBorders, traffic: Car[]) {
