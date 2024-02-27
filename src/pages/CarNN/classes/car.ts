@@ -160,7 +160,11 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(carCtx: CanvasRenderingContext2D, color: string = "blue") {
+  draw(
+    carCtx: CanvasRenderingContext2D,
+    color: string = "blue",
+    showArrows: boolean = false
+  ) {
     carCtx.fillStyle = this.damaged ? "black" : color;
     carCtx.beginPath();
     carCtx.moveTo(this.polygon[0].x, this.polygon[0].y);
@@ -169,7 +173,7 @@ class Car {
     }
     carCtx.fill();
 
-    if (this.sensor) this.sensor.draw(carCtx);
+    if (this.sensor && showArrows) this.sensor.draw(carCtx);
   }
 }
 

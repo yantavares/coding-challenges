@@ -14,3 +14,11 @@ export const CarCanvas = styled.canvas`
 export const NetworkCanvas = styled.canvas`
   background-color: black;
 `;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+`;

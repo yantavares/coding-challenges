@@ -1,12 +1,32 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Car from "./classes/car";
 import Road from "./classes/road";
-import { CarCanvas, CanvasContainer, NetworkCanvas } from "./styles";
+import {
+  CarCanvas,
+  CanvasContainer,
+  NetworkCanvas,
+  ButtonsContainer,
+} from "./styles";
 import Visualizer from "./classes/visualizer.js";
 
 const CarNN = () => {
   const carCanvasRef = useRef(null);
   const networkCanvasRef = useRef(null);
+  const [toggleReload, setToggleReload] = useState(false);
+
+  let bestCar: Car;
+
+  function saveBestCar() {
+    localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+    alert("Best car saved");
+  }
+
+  function discardBestCar() {
+    if (localStorage.getItem("bestBrain")) {
+      localStorage.removeItem("bestBrain");
+      alert("Best car discarded");
+    } else alert("No best car to discard");
+  }
 
   useEffect(() => {
     const carCanvas = carCanvasRef.current;
@@ -23,11 +43,17 @@ const CarNN = () => {
 
       const cars = generateCars(100);
 
+      bestCar = cars[0];
+
+      if (localStorage.getItem("bestBrain")) {
+        bestCar.brain = JSON.parse(localStorage.getItem("bestBrain"));
+      }
+
       const traffic = [new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2)];
 
       animate();
 
-      function generateCars(n) {
+      function generateCars(n: number) {
         const cars = [];
         for (let i = 0; i < n; i++) {
           cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI"));
@@ -44,11 +70,15 @@ const CarNN = () => {
           cars[i].update(road.borders, traffic);
         }
 
+        bestCar = cars.find(
+          (car: Car) => car.y === Math.min(...cars.map((c: Car) => c.y))
+        );
+
         carCanvas.height = window.innerHeight;
         networkCanvas.height = window.innerHeight;
 
         carCtx.save();
-        carCtx.translate(0, -cars[0].y + window.innerHeight * 0.7);
+        carCtx.translate(0, -bestCar.y + window.innerHeight * 0.7);
 
         road.draw(carCtx);
 
@@ -63,20 +93,26 @@ const CarNN = () => {
         }
 
         carCtx.globalAlpha = 1;
+        bestCar.draw(carCtx, "green", true);
 
         carCtx.restore();
         networkCtx.lineDashOffset = -time / 100;
 
-        Visualizer.drawNetwork(networkCtx, cars[0].brain);
+        Visualizer.drawNetwork(networkCtx, bestCar.brain);
 
         requestAnimationFrame(animate);
       }
     }
-  }, []);
+  }, [toggleReload]);
 
   return (
     <CanvasContainer>
       <CarCanvas ref={carCanvasRef} />
+      <ButtonsContainer>
+        <button onClick={saveBestCar}>Save Best Car</button>
+        <button onClick={discardBestCar}>Discard Best Car</button>
+        <button onClick={() => setToggleReload(!toggleReload)}>Reload</button>
+      </ButtonsContainer>
       <NetworkCanvas ref={networkCanvasRef} />
     </CanvasContainer>
   );
