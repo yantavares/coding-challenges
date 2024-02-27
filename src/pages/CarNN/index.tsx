@@ -6,6 +6,7 @@ import {
   CanvasContainer,
   NetworkCanvas,
   ButtonsContainer,
+  MainContainer,
 } from "./styles";
 import Visualizer from "./classes/visualizer.js";
 import { NeuralNetwork } from "./classes/network";
@@ -63,7 +64,6 @@ const CarNN = () => {
         new Car(road.getLaneCenter(2), -500, 30, 50, "NPC", 2),
         new Car(road.getLaneCenter(0), -800, 30, 50, "NPC", 2),
         new Car(road.getLaneCenter(2), -800, 30, 50, "NPC", 2),
-        new Car(road.getLaneCenter(1), -1000, 30, 50, "NPC", 2),
       ];
 
       animate();
@@ -122,12 +122,14 @@ const CarNN = () => {
 
   return (
     <CanvasContainer>
-      <CarCanvas ref={carCanvasRef} />
-      <ButtonsContainer>
-        <button onClick={saveBestCar}>Save Best Car</button>
-        <button onClick={discardBestCar}>Discard Best Car</button>
-        <button onClick={() => setToggleReload(!toggleReload)}>Reload</button>
-      </ButtonsContainer>
+      <MainContainer>
+        <CarCanvas ref={carCanvasRef} />
+        <ButtonsContainer>
+          <button onClick={saveBestCar}>Save Best Car</button>
+          <button onClick={discardBestCar}>Discard Best Car</button>
+          <button onClick={() => setToggleReload(!toggleReload)}>Reload</button>
+        </ButtonsContainer>
+      </MainContainer>
       <NetworkCanvas ref={networkCanvasRef} />
     </CanvasContainer>
   );
