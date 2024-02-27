@@ -25,7 +25,7 @@ const CarNN = () => {
 
       animate();
 
-      function animate() {
+      function animate(time = null) {
         traffic.forEach((car) => {
           car.update(road.borders);
         });
@@ -46,6 +46,7 @@ const CarNN = () => {
         car.draw(carCtx);
 
         carCtx.restore();
+        networkCtx.lineDashOffset = -time / 100;
 
         Visualizer.drawNetwork(networkCtx, car.brain);
 
