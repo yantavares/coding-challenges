@@ -9,6 +9,7 @@ import {
   HomeContainer,
   Language,
   MainHeader,
+  PlaceHolder,
   WholePage,
 } from "./styles";
 
@@ -49,6 +50,19 @@ const Home = () => {
             info={"Cellular Automata to simmulate the behavior of sand"}
             img={sand}
             url={"/sand-falling"}
+          />
+
+          <Challenge
+            name={"Comming Soon..."}
+            info={"Ultimate Tic-Tac-Toe AI bot"}
+            img={""}
+            url={""}
+          />
+          <Challenge
+            name={"Comming Soon..."}
+            info={"Wave Function Collapse"}
+            img={""}
+            url={""}
           />
         </ChallengesContainer>
       </WholePage>

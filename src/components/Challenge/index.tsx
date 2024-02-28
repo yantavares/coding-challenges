@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 const Challenge = ({ name, info, img, url }) => {
   const navigate = useNavigate();
   return (
-    <ChallengeContainer onClick={() => navigate(url)}>
+    <ChallengeContainer onClick={() => (url ? navigate(url) : {})}>
       <ChallengeTitle>{name}</ChallengeTitle>
-      <ChallengeImage src={img} alt={name} />
+      {img && <ChallengeImage src={img} alt={name} />}
       <p>{info}</p>
     </ChallengeContainer>
   );

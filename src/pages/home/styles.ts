@@ -20,7 +20,8 @@ export const ChallengesContainer = styled.div`
   gap: 1rem;
   flex-wrap: wrap;
   align-items: center;
-  width: 80%;
+  justify-content: center;
+  width: 100%;
 `;
 
 export const MainHeader = styled.h1`
@@ -38,4 +39,9 @@ export const Language = styled.i`
   background-image: linear-gradient(90deg, #007acc, #00bacc);
   background-clip: text;
   -webkit-background-clip: text;
+`;
+
+export const PlaceHolder = styled.div`
+  width: 50%;
+  height: 24rem;
 `;
