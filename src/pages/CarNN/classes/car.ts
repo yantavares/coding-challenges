@@ -30,7 +30,7 @@ class Car {
     width: number,
     height: number,
     type: string,
-    maxSpeed: number = 3
+    maxSpeed: number = 3.2
   ) {
     this.x = x;
     this.y = y;

@@ -16,7 +16,7 @@ const CarNN = () => {
   const carCanvasRef = useRef(null);
   const networkCanvasRef = useRef(null);
   const [toggleReload, setToggleReload] = useState(false);
-  const [countdown, setCountdown] = useState(12);
+  const [countdown, setCountdown] = useState(15);
   const [bestDistance, setBestDistance] = useState(0);
   const [bestGlobalDistance, setBestGlobalDistance] = useState(0);
   const [generation, setGeneration] = useState(1);
@@ -25,9 +25,9 @@ const CarNN = () => {
 
   const generateTraffic = (road: Road) => {
     return [
-      new Car(road.getLaneCenter(0), 380, 30, 50, "NPC", 3.2),
-      new Car(road.getLaneCenter(1), 380, 30, 50, "NPC", 3.2),
-      new Car(road.getLaneCenter(2), 380, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(0), 350, 30, 50, "NPC", 3.5),
+      new Car(road.getLaneCenter(1), 350, 30, 50, "NPC", 3.5),
+      new Car(road.getLaneCenter(2), 350, 30, 50, "NPC", 3.5),
 
       new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
@@ -46,11 +46,11 @@ const CarNN = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCountdown((prevCountdown) => {
-        if (prevCountdown === 1) {
+        if (prevCountdown === 0) {
           saveBestCar();
           setToggleReload((prev) => !prev);
           setGeneration((prevGen) => prevGen + 1);
-          return 12;
+          return 15;
         }
         return prevCountdown - 1;
       });
@@ -80,7 +80,7 @@ const CarNN = () => {
         for (let i = 0; i < cars.length; i++) {
           cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
           if (i !== 0) {
-            NeuralNetwork.mutate(cars[i].brain, 0.12);
+            NeuralNetwork.mutate(cars[i].brain, 0.1);
           }
         }
       }
