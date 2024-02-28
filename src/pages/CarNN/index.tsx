@@ -8,6 +8,9 @@ import {
   ButtonsContainer,
   MainContainer,
   InfoDisplay,
+  InfoDisplayContentYellow,
+  InfoDisplayContentRed,
+  NewBestText,
 } from "./styles";
 import Visualizer from "./classes/visualizer.js";
 import { NeuralNetwork } from "./classes/network";
@@ -20,36 +23,62 @@ const CarNN = () => {
   const [bestDistance, setBestDistance] = useState(0);
   const [bestGlobalDistance, setBestGlobalDistance] = useState(0);
   const [generation, setGeneration] = useState(1);
+  const [allCarsCrashed, setAllCarsCrashed] = useState(false);
 
   let bestCar: Car;
 
   const generateTraffic = (road: Road) => {
     return [
-      new Car(road.getLaneCenter(0), 350, 30, 50, "NPC", 3.5),
-      new Car(road.getLaneCenter(1), 350, 30, 50, "NPC", 3.5),
-      new Car(road.getLaneCenter(2), 350, 30, 50, "NPC", 3.5),
+      new Car(road.getLaneCenter(0), 380, 30, 50, "NPC", 3.3),
+      new Car(road.getLaneCenter(1), 380, 30, 50, "NPC", 3.3),
+      new Car(road.getLaneCenter(2), 380, 30, 50, "NPC", 3.3),
 
+      new Car(road.getLaneCenter(0), -100, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(2), -100, 30, 50, "NPC", 2),
+
       new Car(road.getLaneCenter(0), -300, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(2), -300, 30, 50, "NPC", 2),
+
       new Car(road.getLaneCenter(1), -500, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(2), -500, 30, 50, "NPC", 2),
+
+      new Car(road.getLaneCenter(0), -650, 30, 50, "NPC", 2),
+
       new Car(road.getLaneCenter(0), -800, 30, 50, "NPC", 2),
       new Car(road.getLaneCenter(2), -800, 30, 50, "NPC", 2),
+
+      new Car(road.getLaneCenter(1), -950, 30, 50, "NPC", 2),
+
+      new Car(road.getLaneCenter(0), -1100, 30, 50, "NPC", 2),
+      new Car(road.getLaneCenter(1), -1100, 30, 50, "NPC", 2),
     ];
   };
 
+  console.log(allCarsCrashed);
+
   function saveBestCar() {
-    localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+    if (bestCar && bestCar.brain && bestCar.y > bestGlobalDistance)
+      localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+  }
+
+  function resetAll() {
+    if (localStorage.getItem("bestBrain")) {
+      setToggleReload((prev) => !prev);
+      setGeneration(1);
+      setBestDistance(0);
+      localStorage.clear();
+    }
   }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCountdown((prevCountdown) => {
-        if (prevCountdown === 0) {
+        if (prevCountdown === 0 || allCarsCrashed) {
           saveBestCar();
           setToggleReload((prev) => !prev);
           setGeneration((prevGen) => prevGen + 1);
+          setAllCarsCrashed(false);
           return 15;
         }
         return prevCountdown - 1;
@@ -57,7 +86,7 @@ const CarNN = () => {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [allCarsCrashed]);
 
   useEffect(() => {
     const carCanvas = carCanvasRef.current;
@@ -72,6 +101,7 @@ const CarNN = () => {
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
       const cars = generateCars(200);
+
       bestCar = cars[0];
 
       let traffic = generateTraffic(road);
@@ -94,9 +124,7 @@ const CarNN = () => {
       }
 
       function animate(time = null) {
-        if (time % 10000 === 0) {
-          traffic.push(...generateTraffic(road));
-        }
+        setAllCarsCrashed(false);
 
         traffic.forEach((car) => {
           car.update(road.borders);
@@ -141,6 +169,10 @@ const CarNN = () => {
 
         Visualizer.drawNetwork(networkCtx, bestCar.brain);
 
+        if (cars.every((car: Car) => car.damaged)) {
+          setAllCarsCrashed(true);
+        }
+
         requestAnimationFrame(animate);
       }
 
@@ -153,13 +185,32 @@ const CarNN = () => {
       <MainContainer>
         <CarCanvas ref={carCanvasRef} />
         <InfoDisplay>
-          <p>Countdown: {countdown}s</p>
-          <p style={{ width: "100%" }}>
-            Current Distance: {bestDistance < 0 ? 0.0 : bestDistance.toFixed(1)}
+          <p>
+            Countdown:
+            <InfoDisplayContentRed>{countdown}s</InfoDisplayContentRed>
           </p>
-          <p>Best Distance: {bestGlobalDistance.toFixed(1)} </p>
-          <p>Generation: {generation}</p>
-          <ButtonsContainer></ButtonsContainer>
+          <p style={{ width: "100%" }}>
+            Current Distance:
+            <InfoDisplayContentYellow>
+              {bestDistance < 0 ? 0.0 : bestDistance.toFixed(1)}
+              {bestDistance > bestGlobalDistance && (
+                <NewBestText>(New best!)</NewBestText>
+              )}
+            </InfoDisplayContentYellow>
+          </p>
+          <p>
+            Best Distance:
+            <InfoDisplayContentYellow>
+              {bestGlobalDistance.toFixed(1)}
+            </InfoDisplayContentYellow>
+          </p>
+          <p>
+            Generation:
+            <InfoDisplayContentYellow>{generation}</InfoDisplayContentYellow>
+          </p>
+          <ButtonsContainer>
+            <button onClick={resetAll}>Reset brain</button>
+          </ButtonsContainer>
         </InfoDisplay>
       </MainContainer>
       <NetworkCanvas ref={networkCanvasRef} />
