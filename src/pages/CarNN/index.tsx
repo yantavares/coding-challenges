@@ -15,7 +15,8 @@ import {
 import Visualizer from "./classes/visualizer.js";
 import { NeuralNetwork } from "./classes/network";
 
-let learningRate = 0.3;
+let learningRate = 0.5;
+let bestCar: Car = null;
 
 const CarNN = () => {
   const carCanvasRef = useRef(null);
@@ -26,13 +27,12 @@ const CarNN = () => {
   const [bestGlobalDistance, setBestGlobalDistance] = useState(0);
   const [generation, setGeneration] = useState(1);
   const [allCarsCrashed, setAllCarsCrashed] = useState(false);
-  const bestCar = useRef<Car>(null);
 
   const generateTraffic = (road: Road) => {
     return [
-      new Car(road.getLaneCenter(0), 380, 30, 50, "NPC", 3.3),
-      new Car(road.getLaneCenter(1), 380, 30, 50, "NPC", 3.3),
-      new Car(road.getLaneCenter(2), 380, 30, 50, "NPC", 3.3),
+      new Car(road.getLaneCenter(0), 300, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(1), 300, 30, 50, "NPC", 3.2),
+      new Car(road.getLaneCenter(2), 300, 30, 50, "NPC", 3.2),
 
       new Car(road.getLaneCenter(1), -100, 30, 50, "NPC", 2),
 
@@ -55,22 +55,18 @@ const CarNN = () => {
   };
 
   function saveBestCar() {
-    if (
-      bestCar.current &&
-      bestCar.current.brain &&
-      -bestCar.current.y > bestGlobalDistance
-    ) {
-      localStorage.setItem("bestBrain", JSON.stringify(bestCar.current.brain));
+    if (bestCar && bestCar.brain && -bestCar.y > bestGlobalDistance) {
+      localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
       console.log("Best brain saved!");
     }
   }
 
   function resetAll() {
     if (localStorage.getItem("bestBrain")) {
-      setToggleReload((prev) => !prev);
       setGeneration(1);
       setBestDistance(0);
       setBestGlobalDistance(0);
+      setToggleReload(!toggleReload);
       localStorage.clear();
     } else {
       alert("No best brain found");
@@ -105,16 +101,13 @@ const CarNN = () => {
       const networkCtx = networkCanvas.getContext("2d");
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-      const cars = generateCars(200);
+      const cars = generateCars(100);
 
       let traffic = generateTraffic(road);
 
-      if (generation === 5) {
-        learningRate = 0.2;
-      }
-
-      if (generation === 10) {
-        learningRate = 0.1;
+      if (generation % 3 === 0 || bestDistance > bestGlobalDistance + 500) {
+        if (learningRate > 0.15)
+          learningRate = Number((learningRate - 0.1).toPrecision(1));
       }
 
       console.log("Generation: ", generation, " learning rate: ", learningRate);
@@ -139,6 +132,11 @@ const CarNN = () => {
       function animate(time = null) {
         setAllCarsCrashed(false);
 
+        if (generation === 1) {
+          setBestGlobalDistance(0);
+          setBestDistance(0);
+        }
+
         traffic.forEach((car) => {
           car.update(road.borders);
         });
@@ -147,10 +145,10 @@ const CarNN = () => {
           cars[i].update(road.borders, traffic);
         }
 
-        bestCar.current = cars.find(
+        bestCar = cars.find(
           (car: Car) => car.y === Math.min(...cars.map((c: Car) => c.y))
         );
-        setBestDistance(-bestCar.current.y);
+        setBestDistance(-bestCar.y);
 
         if (bestGlobalDistance < bestDistance) {
           setBestGlobalDistance(bestDistance);
@@ -160,7 +158,7 @@ const CarNN = () => {
         networkCanvas.height = window.innerHeight;
 
         carCtx.save();
-        carCtx.translate(0, -bestCar.current.y + window.innerHeight * 0.7);
+        carCtx.translate(0, -bestCar.y + window.innerHeight * 0.7);
 
         road.draw(carCtx);
 
@@ -175,12 +173,12 @@ const CarNN = () => {
         }
 
         carCtx.globalAlpha = 1;
-        bestCar.current.draw(carCtx, "green", true);
+        bestCar.draw(carCtx, "green", true);
 
         carCtx.restore();
         networkCtx.lineDashOffset = -time / 100;
 
-        Visualizer.drawNetwork(networkCtx, bestCar.current.brain);
+        Visualizer.drawNetwork(networkCtx, bestCar.brain);
 
         if (cars.every((car: Car) => car.damaged)) {
           setAllCarsCrashed(true);
@@ -198,29 +196,29 @@ const CarNN = () => {
       <MainContainer>
         <CarCanvas ref={carCanvasRef} />
         <InfoDisplay>
-          <p>
+          <h4>
             Countdown:
             <InfoDisplayContentRed>{countdown}s</InfoDisplayContentRed>
-          </p>
-          <p style={{ width: "100%" }}>
+          </h4>
+          <h4 style={{ width: "100%" }}>
             Current Distance:
             <InfoDisplayContentYellow>
               {bestDistance < 0 ? 0.0 : bestDistance.toFixed(1)}
-              {bestDistance > bestGlobalDistance && (
-                <NewBestText>(New best!)</NewBestText>
-              )}
             </InfoDisplayContentYellow>
-          </p>
-          <p>
+            {bestDistance > bestGlobalDistance && (
+              <NewBestText>(New best!)</NewBestText>
+            )}
+          </h4>
+          <h4>
             Best Distance:
             <InfoDisplayContentYellow>
               {bestGlobalDistance.toFixed(1)}
             </InfoDisplayContentYellow>
-          </p>
-          <p>
+          </h4>
+          <h4>
             Generation:
             <InfoDisplayContentYellow>{generation}</InfoDisplayContentYellow>
-          </p>
+          </h4>
           <ButtonsContainer>
             <button onClick={resetAll}>Reset brain</button>
           </ButtonsContainer>

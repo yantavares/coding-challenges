@@ -37,7 +37,7 @@ export const InfoDisplay = styled.div`
   width: 15rem;
 `;
 
-export const InfoDisplayContentRed = styled.h3`
+export const InfoDisplayContentRed = styled.p`
   color: #ff0000;
   padding: 0;
   margin: 0;
