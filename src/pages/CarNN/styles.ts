@@ -45,7 +45,7 @@ export const InfoDisplayContentRed = styled.h3`
   font-size: 1.5rem;
 `;
 
-export const InfoDisplayContentYellow = styled.h3`
+export const InfoDisplayContentYellow = styled.p`
   color: #ffff00;
   padding: 0;
   margin: 0;
