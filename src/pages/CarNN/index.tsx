@@ -17,6 +17,7 @@ import { NeuralNetwork } from "./classes/network";
 
 let learningRate = 0.5;
 let bestCar: Car = null;
+const AIAmount = 50;
 
 const CarNN = () => {
   const carCanvasRef = useRef(null);
@@ -101,11 +102,11 @@ const CarNN = () => {
       const networkCtx = networkCanvas.getContext("2d");
 
       const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-      const cars = generateCars(100);
+      const cars = generateCars(AIAmount);
 
       let traffic = generateTraffic(road);
 
-      if (generation % 3 === 0 || bestDistance > bestGlobalDistance + 500) {
+      if (generation % 2 === 0 || bestDistance > bestGlobalDistance + 500) {
         if (learningRate > 0.15)
           learningRate = Number((learningRate - 0.1).toPrecision(1));
       }
