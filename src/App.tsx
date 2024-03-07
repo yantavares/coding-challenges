@@ -8,6 +8,7 @@ import MazeHome from "./pages/MazePlayground/MazeHome";
 import MazeCreator from "./pages/MazePlayground/MazeCreator";
 import CarNN from "./pages/CarNN";
 import "./App.css";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             element={<MazeCreator />}
           />
         </Routes>
+        <Footer />
       </Suspense>
     </HashRouter>
   );
